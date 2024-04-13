@@ -1,0 +1,35 @@
+version: '3'
+services:
+  drone-server:
+    restart: always
+    image: drone/drone:2
+    ports:
+      - "8081:80"
+    volumes:
+      - ./drone:/var/lib/drone/
+      - ./data:/data/
+    environment:
+      - DRONE_GITEA_SERVER=http://192.168.196.128:3000
+      - DRONE_GITEA_CLIENT_ID=9a3003b6-3f97-410e-982c-7c8e402fb32d
+      - DRONE_GITEA_CLIENT_SECRET=eV4Xr6WwReWtkdqDWafP3NlfqvkaTG7dkyshe2UgFQA7
+      - DRONE_SERVER_HOST=192.168.196.128:8081
+      - DRONE_SERVER_PROTO=http # 支持http, https
+      - DRONE_RPC_SECRET=2521be4e506e5b6a383267ea5a0ec07a
+      - DRONE_GIT_ALWAYS_AUTH=true
+      - DRONE_GIT_USERNAME=szm
+      - DRONE_GIT_PASSWORD=szm123456
+      - DRONE_USER_CREATE=username:szm,admin:true # 开启管理员账户
+  drone-runner-docker:
+    restart: always
+    image: drone/drone-runner-docker:1
+    ports:
+      - "8082:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_RPC_PROTO=http # 支持http, https
+      - DRONE_RPC_HOST=192.168.196.128:8081
+      - DRONE_RPC_SECRET=2521be4e506e5b6a383267ea5a0ec07a
+      - DRONE_RUNNER_NAME=drone-runner-docker
+      - DRONE_RUNNER_CAPACITY=2
+

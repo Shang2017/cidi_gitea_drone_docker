@@ -1,0 +1,36 @@
+version: '3.6'
+services:
+   app:
+      build:
+         context: '.'
+         dockerfile: Dockerfile
+         args: [flutter_version=3.22.0-6.0.pre]
+      image: 'flutter'
+      working_dir: '/app'
+      depends_on:
+         - emulator
+      volumes:
+         - './:/app'
+
+   emulator:
+    ports:
+      - 6080:6080
+      - 5555:5555
+      - 5554:5554
+    expose:
+      - 8554/tcp
+      - 5555/tcp
+    environment:
+      - WEB_VNC=true
+    devices:
+      - '/dev/kvm:/dev/kvm'
+    image: budtmo/docker-android:emulator_14.0
+
+
+ 
+
+
+
+
+
+   
